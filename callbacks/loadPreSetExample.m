@@ -1,4 +1,4 @@
-function loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit)
+function loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, hTFAxes)
     % Populate numerator and denominator based on the selected example
     exampleIdx = get(hExampleDropdown, 'Value');
     switch exampleIdx
@@ -23,8 +23,25 @@ function loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit)
         case 7 % PID-Tuned System
             set(hNumEdit, 'String', '5');
             set(hDenEdit, 'String', '1 5 6');
-        otherwise
-            set(hNumEdit, 'String', '');
-            set(hDenEdit, 'String', '');
+    end
+
+    % Update the transfer function display
+    try
+        num = str2num(get(hNumEdit, 'String')); %#ok<ST2NM>
+        den = str2num(get(hDenEdit, 'String')); %#ok<ST2NM>
+        validateCoefficients(num, den);
+        tfLatex = formatTransferFunctionLaTeX(num, den);
+
+        cla(hTFAxes);
+        text(0.5, 0.5, ['$$' tfLatex '$$'], 'Parent', hTFAxes, ...
+            'Interpreter', 'latex', 'HorizontalAlignment', 'center', ...
+            'VerticalAlignment', 'middle', 'FontSize', 14);
+        set(hTFAxes, 'Visible', 'on', 'XLim', [0 1], 'YLim', [0 1]);
+    catch
+        cla(hTFAxes);
+        text(0.5, 0.5, 'Invalid Transfer Function', 'Parent', hTFAxes, ...
+            'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'FontSize', 12, ...
+            'Color', 'red');
+        set(hTFAxes, 'Visible', 'on', 'XLim', [0 1], 'YLim', [0 1]);
     end
 end
