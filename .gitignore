@@ -1,1 +1,17 @@
+# MATLAB backup files
+*.asv
+*.m~
+*.mlx~
+*.autosave
 
+# Output folders and temporary files
+output/
+*.log
+*.tmp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Version control
+*.git
