@@ -2,9 +2,9 @@ function loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, hTFAxes, hError
     % Populate numerator and denominator based on the selected example
     exampleIdx = get(hExampleDropdown, 'Value');
     switch exampleIdx
-        case 1 % Custom
-            set(hNumEdit, 'String', '');
-            set(hDenEdit, 'String', '');
+        case 1 % Default
+            set(hNumEdit, 'String', '1');
+            set(hDenEdit, 'String', '1 1 1');
         case 2 % Inverted Pendulum
             set(hNumEdit, 'String', '1');
             set(hDenEdit, 'String', '1 0 -9.8');
