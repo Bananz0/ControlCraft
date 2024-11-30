@@ -1,4 +1,4 @@
-function plotCallback(hNumEdit, hDenEdit)
+function plotTransferFunction(hNumEdit, hDenEdit)
     % Callback for plotting responses
     try
         numStr = get(hNumEdit, 'String');
