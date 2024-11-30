@@ -1,7 +1,10 @@
 function layoutTemplate()
+    % Create main figure and tab group
     fig = figure('Name', 'ControlCraft', 'NumberTitle', 'off', ...
         'Position', [100, 100, 800, 600]);
     tgroup = uitabgroup('Parent', fig);
+
+    % Create tabs
     tab1 = uitab('Parent', tgroup, 'Title', 'Model Input');
     tab2 = uitab('Parent', tgroup, 'Title', 'Controller Design');
 

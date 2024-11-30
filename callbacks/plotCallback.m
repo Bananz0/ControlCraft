@@ -1,6 +1,6 @@
-function plotCallback(sys, figs)
+function plotCallback(sys, figHandles)
     try
-        updatePlotsOnly(sys, figs);
+        updatePlotsOnly(sys, figHandles);
     catch ME
         disp(['Error in plotting: ', ME.message]);
     end

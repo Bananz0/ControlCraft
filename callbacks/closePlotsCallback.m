@@ -1,4 +1,4 @@
-function closePlots(figHandles)
+function closePlotsCallback(figHandles)
     figFields = fieldnames(figHandles);
     for i = 1:numel(figFields)
         if isvalid(figHandles.(figFields{i}))
