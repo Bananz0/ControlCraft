@@ -1,16 +1,16 @@
-function previewTransferFunction(hNumEdit, hDenEdit)
-    numStr = get(hNumEdit, 'String');
-    denStr = get(hDenEdit, 'String');
-
+function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
     try
-        num = str2num(numStr); %#ok<ST2NM>
-        den = str2num(denStr); %#ok<ST2NM>
+        num = str2num(get(hNumEdit, 'String')); %#ok<ST2NM>
+        den = str2num(get(hDenEdit, 'String')); %#ok<ST2NM>
         validateCoefficients(num, den);
-
-        % Create transfer function
-        sys = tf(num, den);
-        disp(sys); % Print transfer function in command window
+        tfLatex = formatTransferFunctionLaTeX(num, den);
+        cla(hTFAxes);
+        text(0.5, 0.5, ['\bf Transfer Function: $$' tfLatex '$$'], ...
+            'Parent', hTFAxes, 'Interpreter', 'latex', ...
+            'HorizontalAlignment', 'center', 'FontSize', 14);
+        set(hTFAxes, 'Visible', 'off', 'XLim', [0 1], 'YLim', [0 1]);
+        set(hErrorMsg, 'String', '');
     catch ME
-        disp(['Error: ', ME.message]);
+        set(hErrorMsg, 'String', ['Error: ' ME.message]);
     end
 end

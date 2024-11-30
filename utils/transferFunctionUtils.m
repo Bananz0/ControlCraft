@@ -2,12 +2,18 @@ function validateCoefficients(num, den)
     if isempty(num) || isempty(den)
         error('Coefficients cannot be empty.');
     end
-    if any(den == 0)
-        error('Denominator cannot have zero coefficients.');
+    if any(~isfinite(num)) || any(~isfinite(den))
+        error('Coefficients must be finite numbers.');
+    end
+    if length(den) < 1
+        error('Denominator must have at least one coefficient.');
+    end
+    if den(1) == 0
+        error('Leading coefficient of denominator cannot be zero.');
     end
 end
 
-function tfLatex = formatTransferFunctionLatex(num, den)
+function tfLatex = formatTransferFunctionLaTeX(num, den)
     numStr = formatPolynomialLatex(num);
     denStr = formatPolynomialLatex(den);
     tfLatex = ['\frac{' numStr '}{' denStr '}'];
@@ -20,14 +26,8 @@ function polyStr = formatPolynomialLatex(coefs)
         coef = coefs(i);
         power = n - i;
         if coef == 0, continue; end
-        coefStr = num2str(coef);
-        if power == 0
-            varStr = '';
-        elseif power == 1
-            varStr = 's';
-        else
-            varStr = ['s^{' num2str(power) '}'];
-        end
+        if coef == 1 && power ~= 0, coefStr = ''; elseif coef == -1 && power ~= 0, coefStr = '-'; else, coefStr = num2str(coef); end
+        varStr = ''; if power > 0, varStr = ['s^{' num2str(power) '}']; end
         terms{end+1} = [coefStr varStr]; %#ok<AGROW>
     end
     polyStr = strjoin(terms, ' + ');
