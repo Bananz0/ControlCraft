@@ -1,16 +1,25 @@
-function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
+function previewTransferFunction(hNumEdit, hDenEdit, hErrorMsg)
+    % Callback for the Preview Transfer Function button
     try
-        num = str2num(get(hNumEdit, 'String')); %#ok<ST2NM>
-        den = str2num(get(hDenEdit, 'String')); %#ok<ST2NM>
+        % Get user input
+        numStr = get(hNumEdit, 'String');
+        denStr = get(hDenEdit, 'String');
+
+        % Convert to numeric arrays
+        num = str2num(numStr); %#ok<ST2NM>
+        den = str2num(denStr); %#ok<ST2NM>
+
+        % Validate coefficients
         validateCoefficients(num, den);
-        tfLatex = formatTransferFunctionLaTeX(num, den);
-        cla(hTFAxes);
-        text(0.5, 0.5, ['\bf Transfer Function: $$' tfLatex '$$'], ...
-            'Parent', hTFAxes, 'Interpreter', 'latex', ...
-            'HorizontalAlignment', 'center', 'FontSize', 14);
-        set(hTFAxes, 'Visible', 'off', 'XLim', [0 1], 'YLim', [0 1]);
-        set(hErrorMsg, 'String', '');
+
+        % Create and display the transfer function
+        sys = tf(num, den);
+        disp(sys);
+
+        % Display success message
+        set(hErrorMsg, 'String', 'Transfer Function is valid!');
     catch ME
+        % Display error message
         set(hErrorMsg, 'String', ['Error: ' ME.message]);
     end
 end
