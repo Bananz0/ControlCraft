@@ -1,5 +1,4 @@
 function validateCoefficients(num, den)
-    % Validate transfer function coefficients
     if isempty(num) || isempty(den)
         error('Coefficients cannot be empty.');
     end
@@ -9,7 +8,10 @@ function validateCoefficients(num, den)
     if any(~isfinite(num)) || any(~isfinite(den))
         error('Coefficients must be finite numbers.');
     end
-    if length(den) < 1 || den(1) == 0
-        error('The leading coefficient of the denominator cannot be zero.');
+    if length(den) < 1
+        error('Denominator must have at least one coefficient.');
+    end
+    if den(1) == 0
+        error('Leading coefficient of denominator cannot be zero.');
     end
 end

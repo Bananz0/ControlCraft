@@ -15,6 +15,10 @@ function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
         % Create the transfer function object
         sys = tf(num, den);
 
+            % Store current numerator and denominator strings for optimization
+        setappdata(0, 'CurrentNumerator', numStr);
+        setappdata(0, 'CurrentDenominator', denStr);
+
         % Format the transfer function for LaTeX display
         tfLatex = formatTransferFunctionLaTeX(num, den);
 

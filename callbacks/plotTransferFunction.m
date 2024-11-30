@@ -10,9 +10,46 @@ function plotTransferFunction(hNumEdit, hDenEdit)
         validateCoefficients(num, den);
 
         sys = tf(num, den);
-        figure; impulse(sys); title('Impulse Response'); grid on;
-        figure; step(sys); title('Step Response'); grid on;
-        figure; bode(sys); title('Bode Plot'); grid on;
+
+        % Store the system for use in optimization
+        setappdata(0, 'CurrentSystem', sys);
+
+        % Plot Impulse Response
+        figure('Name', 'Impulse Response');
+        impulse(sys);
+        title('Impulse Response');
+        grid on;
+
+        % Plot Step Response
+        figure('Name', 'Step Response');
+        step(sys);
+        title('Step Response');
+        grid on;
+
+        % Plot Bode Plot
+        figure('Name', 'Bode Plot');
+        bode(sys);
+        title('Bode Plot');
+        grid on;
+
+        % Plot Root Locus
+        figure('Name', 'Root Locus');
+        rlocus(sys);
+        title('Root Locus');
+        grid on;
+
+        % Plot Nyquist Plot
+        figure('Name', 'Nyquist Plot');
+        nyquist(sys);
+        title('Nyquist Plot');
+        grid on;
+
+        % Plot Pole-Zero Map
+        figure('Name', 'Pole-Zero Map');
+        pzmap(sys);
+        title('Pole-Zero Map');
+        grid on;
+
     catch ME
         disp(['Error in plotting: ', ME.message]);
     end
