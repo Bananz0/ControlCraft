@@ -1,8 +1,9 @@
-% main.m - Entry point for the ControlCraft GUI
+% main.m - Main entry point for the ControlCraft GUI
 function main()
     addpath(genpath('utils'));
     addpath(genpath('callbacks'));
+    addpath(genpath('templates'));
 
-    % Initialize GUI
-    createControlSystemGUI();
+    % Launch the GUI
+    layoutTemplate();
 end
