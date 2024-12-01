@@ -1,8 +1,18 @@
-function tfLatex = formatTransferFunctionLaTeX(num, den)
+function tfLatex = formatTransferFunctionLaTeX(num, den, kValue)
+    if nargin < 3
+        kValue = 1;
+    end
+
     num_str = formatPolynomialLaTeX(num);
     den_str = formatPolynomialLaTeX(den);
-    tfLatex = ['\frac{' num_str '}{' den_str '}'];
+
+    if kValue ~= 1
+        tfLatex = ['k \times \frac{' num_str '}{' den_str '}'];
+    else
+        tfLatex = ['\frac{' num_str '}{' den_str '}'];
+    end
 end
+
 
 function poly_str = formatPolynomialLaTeX(coefs)
     n = length(coefs);

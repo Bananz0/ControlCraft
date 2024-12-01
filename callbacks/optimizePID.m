@@ -1,4 +1,12 @@
 function optimizePID(hKpEdit, hKiEdit, hKdEdit)
+    % Retrieve the stored system
+    sys = getappdata(0, 'CurrentSystem');
+
+    if isempty(sys)
+        disp('Error: System not defined. Please plot the system first.');
+        return;
+    end
+    
     Kp = str2double(get(hKpEdit, 'String'));
     Ki = str2double(get(hKiEdit, 'String'));
     Kd = str2double(get(hKdEdit, 'String'));

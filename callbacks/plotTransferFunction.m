@@ -1,13 +1,17 @@
-function plotTransferFunction(hNumEdit, hDenEdit)
+function plotTransferFunction(hNumEdit, hDenEdit, hKSlider)
     % Callback for plotting responses
     try
         numStr = get(hNumEdit, 'String');
         denStr = get(hDenEdit, 'String');
+        kValue = get(hKSlider, 'Value'); % Get the current value of k
 
         num = str2num(numStr); %#ok<ST2NM>
         den = str2num(denStr); %#ok<ST2NM>
 
         validateCoefficients(num, den);
+
+        % Multiply the numerator by k
+        num = kValue * num;
 
         sys = tf(num, den);
 

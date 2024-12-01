@@ -1,10 +1,12 @@
-function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
+function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText)
     % Dynamically update the display of a transfer function in the GUI
     try
         % Retrieve and parse user inputs
-        numStr = strtrim(get(hNumEdit, 'String')); % Get numerator input as string
-        denStr = strtrim(get(hDenEdit, 'String')); % Get denominator input as string
-        
+        numStr = strtrim(get(hNumEdit, 'String'));
+        denStr = strtrim(get(hDenEdit, 'String'));
+        kValue = get(hKSlider, 'Value'); % Get the current value of k
+        set(hKValueText, 'String', num2str(kValue, '%.2f')); % Update k display
+
         % Convert input strings to numeric arrays
         num = str2num(numStr); %#ok<ST2NM>
         den = str2num(denStr); %#ok<ST2NM>
@@ -12,15 +14,18 @@ function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
         % Validate the input coefficients
         validateCoefficients(num, den);
 
+        % Multiply the numerator by k
+        num = kValue * num;
+
+        % **Debugging statements**
+        disp(['num = ', mat2str(num)]);
+        disp(['den = ', mat2str(den)]);
+
         % Create the transfer function object
         sys = tf(num, den);
 
-            % Store current numerator and denominator strings for optimization
-        setappdata(0, 'CurrentNumerator', numStr);
-        setappdata(0, 'CurrentDenominator', denStr);
-
         % Format the transfer function for LaTeX display
-        tfLatex = formatTransferFunctionLaTeX(num, den);
+        tfLatex = formatTransferFunctionLaTeX(num, den, kValue);
 
         % Clear previous content on the axes and display the formatted LaTeX string
         cla(hTFAxes); % Clear any previous rendering
@@ -38,6 +43,10 @@ function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg)
         if ~isempty(hErrorMsg)
             set(hErrorMsg, 'String', '');
         end
+
+        % Store the system for use elsewhere
+        setappdata(0, 'CurrentSystem', sys);
+
     catch ME
         % Handle errors gracefully by displaying the error message in the GUI
         if ~isempty(hErrorMsg)
