@@ -1,1 +1,12 @@
-callbacks/closeAllPlots.m callbacks/kSliderCallback.m callbacks/loadPreSetExample.m callbacks/optimizeCallback.m callbacks/optimizePID.m callbacks/plotTransferFunction.m callbacks/previewCallback.m callbacks/previewTransferFunction.m callbacks/setupControllerDesignTab.m callbacks/setupModelInputTab.m callbacks/validateCoefficients.m
+function kSliderCallback(src, hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKValueText)
+    % Callback function for when the k slider is moved
+    
+    % Get the current value of the slider
+    kValue = get(src, 'Value');
+    
+    % Update the text display for the k value
+    set(hKValueText, 'String', num2str(kValue, '%.2f'));
+    
+    % Update the transfer function display with the new k value
+    previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, src, hKValueText);
+end
