@@ -1,14 +1,15 @@
 function setupModelInputTab(parentTab)
-    % Initialize UI elements for Model Input Tab
+    % Get the examples data
+    examples = getExampleData();
 
+    % Initialize UI elements for Model Input Tab
     % Dropdown for pre-set examples
     uicontrol('Parent', parentTab, 'Style', 'text', 'String', 'Select Pre-Set Example:', ...
         'Units', 'normalized', 'Position', [0.05, 0.92, 0.2, 0.04], 'HorizontalAlignment', 'right');
 
-    % Create the dropdown menu with default value set to 'Custom'
+    % Create the dropdown menu using example names
     hExampleDropdown = uicontrol('Parent', parentTab, 'Style', 'popupmenu', ...
-        'String', {'Custom', 'Inverted Pendulum', 'Mass-Spring-Damper', 'DC Motor', ...
-                   'First-Order System', 'Second-Order Underdamped', 'PID-Tuned System'}, ...
+        'String', {examples.name}, ... % Use names from the examples array
         'Value', 1, ... % Set default value to 'Custom'
         'Units', 'normalized', 'Position', [0.27, 0.92, 0.6, 0.05]);
 
@@ -52,25 +53,29 @@ function setupModelInputTab(parentTab)
     % Now set the 'Callback' property of hKSlider after it's defined
     set(hKSlider, 'Callback', @(src, event) kSliderCallback(src, hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKValueText));
 
-
     % Plot Button
     uicontrol('Parent', parentTab, 'Style', 'pushbutton', 'String', 'Plot', ...
-    'Units', 'normalized', 'Position', [0.55, 0.65, 0.15, 0.05], ...
-    'Callback', @(src, event) plotTransferFunction(hNumEdit, hDenEdit, hKSlider));
+        'Units', 'normalized', 'Position', [0.55, 0.65, 0.15, 0.05], ...
+        'Callback', @(src, event) plotTransferFunction(hNumEdit, hDenEdit, hKSlider));
 
     % Close Plots Button
     uicontrol('Parent', parentTab, 'Style', 'pushbutton', 'String', 'Close Plots', ...
         'Units', 'normalized', 'Position', [0.75, 0.65, 0.15, 0.05], ...
         'Callback', @(src, event) closeAllPlots());
 
-    % Update the handles in the callbacks
-    set(hExampleDropdown, 'Callback', @(~, ~) loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText));
-    set(hNumEdit, 'Callback', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText));
-    set(hDenEdit, 'Callback', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText));
-    set(hNumEdit, 'KeyReleaseFcn', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText));
-    set(hDenEdit, 'KeyReleaseFcn', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText));
+    % Set the Callbacks, passing 'examples' to loadPreSetExample
+    set(hExampleDropdown, 'Callback', @(~, ~) loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, ...
+        hTFAxes, hErrorMsg, hKSlider, hKValueText, examples));
+    set(hNumEdit, 'Callback', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, ...
+        hTFAxes, hErrorMsg, hKSlider, hKValueText));
+    set(hDenEdit, 'Callback', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, ...
+        hTFAxes, hErrorMsg, hKSlider, hKValueText));
+    set(hNumEdit, 'KeyReleaseFcn', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, ...
+        hTFAxes, hErrorMsg, hKSlider, hKValueText));
+    set(hDenEdit, 'KeyReleaseFcn', @(~, ~) previewTransferFunction(hNumEdit, hDenEdit, ...
+        hTFAxes, hErrorMsg, hKSlider, hKValueText));
 
-    % Initial call to display the transfer function
-    loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText);
-    previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlider, hKValueText);
+    % Automatically load the default example from loadPreSetExample
+    loadPreSetExample(hExampleDropdown, hNumEdit, hDenEdit, hTFAxes, ...
+        hErrorMsg, hKSlider, hKValueText, examples);
 end

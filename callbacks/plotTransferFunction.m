@@ -1,36 +1,30 @@
 function plotTransferFunction(hNumEdit, hDenEdit, hKSlider)
-    % Callback for plotting responses
     try
-        numStr = get(hNumEdit, 'String');
-        denStr = get(hDenEdit, 'String');
-        kValue = get(hKSlider, 'Value'); % Get the current value of k
+        % Retrieve and parse user inputs
+        numStr = strtrim(get(hNumEdit, 'String'));
+        denStr = strtrim(get(hDenEdit, 'String'));
+        kValue = get(hKSlider, 'Value');
 
-        num = str2num(numStr); %#ok<ST2NM>
-        den = str2num(denStr); %#ok<ST2NM>
-
-        validateCoefficients(num, den);
+        % Convert input strings to numeric arrays or symbolic expressions
+        num = parsePolynomialInput(numStr);
+        den = parsePolynomialInput(denStr);
 
         % Multiply the numerator by k
         num = kValue * num;
 
+        % Validate the input coefficients
+        validateCoefficients(num, den);
+
+        % Create the transfer function
         sys = tf(num, den);
 
-        % Store the system for use in optimization
-        setappdata(0, 'CurrentSystem', sys);
-
-        % Plot Impulse Response
-        figure('Name', 'Impulse Response');
-        impulse(sys);
-        title('Impulse Response');
-        grid on;
-
-        % Plot Step Response
+        % Plot step response
         figure('Name', 'Step Response');
         step(sys);
         title('Step Response');
         grid on;
 
-        % Plot Bode Plot
+        % Plot Bode plot
         figure('Name', 'Bode Plot');
         bode(sys);
         title('Bode Plot');
@@ -54,7 +48,12 @@ function plotTransferFunction(hNumEdit, hDenEdit, hKSlider)
         title('Pole-Zero Map');
         grid on;
 
+        % Store the system for use elsewhere
+        setappdata(0, 'CurrentSystem', sys);
+        setappdata(0, 'CurrentNumerator', numStr);
+        setappdata(0, 'CurrentDenominator', denStr);
+
     catch ME
-        disp(['Error in plotting: ', ME.message]);
+        errordlg(['Error: ' ME.message], 'Plot Error');
     end
 end

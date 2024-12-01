@@ -7,19 +7,15 @@ function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlide
         kValue = get(hKSlider, 'Value'); % Get the current value of k
         set(hKValueText, 'String', num2str(kValue, '%.2f')); % Update k display
 
-        % Convert input strings to numeric arrays
-        num = str2num(numStr); %#ok<ST2NM>
-        den = str2num(denStr); %#ok<ST2NM>
+        % Convert input strings to numeric arrays or symbolic expressions
+        num = parsePolynomialInput(numStr);
+        den = parsePolynomialInput(denStr);
 
         % Validate the input coefficients
         validateCoefficients(num, den);
 
         % Multiply the numerator by k
         num = kValue * num;
-
-        % **Debugging statements**
-        disp(['num = ', mat2str(num)]);
-        disp(['den = ', mat2str(den)]);
 
         % Create the transfer function object
         sys = tf(num, den);
@@ -46,6 +42,8 @@ function previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKSlide
 
         % Store the system for use elsewhere
         setappdata(0, 'CurrentSystem', sys);
+        setappdata(0, 'CurrentNumerator', numStr);
+        setappdata(0, 'CurrentDenominator', denStr);
 
     catch ME
         % Handle errors gracefully by displaying the error message in the GUI

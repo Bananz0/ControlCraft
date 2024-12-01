@@ -1,4 +1,1 @@
-function kSliderCallback(src, hNumEdit, hDenEdit, hTFAxes, hErrorMsg, hKValueText)
-    % Callback function for when the k slider is moved
-    previewTransferFunction(hNumEdit, hDenEdit, hTFAxes, hErrorMsg, src, hKValueText);
-end
+callbacks/closeAllPlots.m callbacks/kSliderCallback.m callbacks/loadPreSetExample.m callbacks/optimizeCallback.m callbacks/optimizePID.m callbacks/plotTransferFunction.m callbacks/previewCallback.m callbacks/previewTransferFunction.m callbacks/setupControllerDesignTab.m callbacks/setupModelInputTab.m callbacks/validateCoefficients.m
